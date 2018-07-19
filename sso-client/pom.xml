@@ -9,10 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sso-erp</artifactId>
-    <packaging>war</packaging>
+    <artifactId>sso-client</artifactId>
 
-    <name>sso-erp Maven Webapp</name>
+    <name>sso-client</name>
     <url>http://www.example.com</url>
 
     <properties>
@@ -22,13 +21,6 @@
     </properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>com.landy</groupId>
-            <artifactId>sso-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -38,30 +30,7 @@
     </dependencies>
 
     <build>
-        <finalName>sso-erp</finalName>
-
-        <plugins>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>8.1.9.v20130131</version>
-                <configuration>
-                    <stopKey>stop</stopKey>
-                    <stopPort>8000</stopPort>
-                    <webAppConfig>
-                        <contextPath>/erp</contextPath>
-                    </webAppConfig>
-                    <scanIntervalSeconds>4</scanIntervalSeconds>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>8083</port>
-                            <maxIdleTime>60000</maxIdleTime>
-                        </connector>
-                    </connectors>
-                </configuration>
-            </plugin>
-        </plugins>
-
+        <finalName>sso-client</finalName>
         <!--<pluginManagement>&lt;!&ndash; lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) &ndash;&gt;-->
             <!--<plugins>-->
                 <!--<plugin>-->

@@ -1,22 +1,21 @@
-package com.landy.sso.erp.filter;
+package com.landy.sso.client.filter;
 
-import java.io.IOException;
-import java.net.URLEncoder;
+import com.landy.sso.client.util.PropertiesUtil;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
+import java.io.IOException;
+import java.net.URLEncoder;
 
 public class SSOClientFilter implements Filter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SSOClientFilter.class);
 
     public void destroy() {
     }
@@ -29,9 +28,11 @@ public class SSOClientFilter implements Filter {
         String ticket = request.getParameter("ticket");
         String url = URLEncoder.encode(request.getRequestURL().toString(), "UTF-8");
 
+        String ticketUrl = PropertiesUtil.getPropertiesValue("sso.server.url.ticket");
+        String serviceUrl = PropertiesUtil.getPropertiesValue("sso.server.url.index");
         if (null == username) {
             if (null != ticket && !"".equals(ticket)) {
-                PostMethod postMethod = new PostMethod("http://localhost:8081/sso/ticket");
+                PostMethod postMethod = new PostMethod(ticketUrl);
                 postMethod.addParameter("ticket", ticket);
                 HttpClient httpClient = new HttpClient();
                 try {
@@ -42,13 +43,16 @@ public class SSOClientFilter implements Filter {
                     e.printStackTrace();
                 }
                 if (null != username && !"".equals(username)) {
+                    LOGGER.info("login username:{}",username);
                     session.setAttribute("username", username);
                     filterChain.doFilter(request, response);
                 } else {
-                    response.sendRedirect("http://localhost:8081/sso/index.jsp?service=" + url);
+                    LOGGER.info("redirect login url:{}",serviceUrl + url);
+                    response.sendRedirect(serviceUrl + url);
                 }
             } else {
-                response.sendRedirect("http://localhost:8081/sso/index.jsp?service=" + url);
+                LOGGER.info("redirect login url:{}",serviceUrl + url);
+                response.sendRedirect(serviceUrl + url);
             }
         } else {
             filterChain.doFilter(request, response);

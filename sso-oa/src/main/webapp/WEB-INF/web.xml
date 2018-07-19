@@ -6,7 +6,7 @@
 
     <filter>
         <filter-name>ssoClientFilter</filter-name>
-        <filter-class>com.landy.sso.oa.filter.SSOClientFilter</filter-class>
+        <filter-class>com.landy.sso.client.filter.SSOClientFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>ssoClientFilter</filter-name>
